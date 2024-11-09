@@ -68,9 +68,11 @@ def book_reservation_on_gym(data):
     return True
 
 def reserve_swim(date):
+    print("Reserving swim for date:", date)
     return True
     
 def reserve_gym(date):
+    print("Reserving gym for date:", date)
     return True
 
 
