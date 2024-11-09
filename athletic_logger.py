@@ -15,6 +15,7 @@ from selenium.webdriver.chrome.service import Service
 os.system("clear")
 
 
+
 def book_reservation_on_gym(data):
     driver.get('https://ieathleticreservations.ie.edu/sz')
     
