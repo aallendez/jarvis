@@ -1,6 +1,7 @@
 import requests 
 from flask import Flask, request, jsonify
 from athletic_logger import reserve_swim, reserve_gym
+
 import os
 
 app = Flask(__name__)
@@ -8,7 +9,6 @@ app = Flask(__name__)
 VERIFICATION_TOKEN = os.getenv('VERIFICATION_TOKEN')
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 PHONE_NUMBER_ID = os.getenv('PHONE_NUMBER_ID')
-
 
 API_URL = f'https://graph.facebook.com/v21.0/{PHONE_NUMBER_ID}/messages'
 
