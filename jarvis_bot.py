@@ -1,14 +1,14 @@
 import requests 
 from flask import Flask, request, jsonify
 from athletic_logger import reserve_swim, reserve_gym
+import os
 
 app = Flask(__name__)
 
-VERIFICATION_TOKEN = "aZ7qL9sX3bNpRwT5"
+VERIFICATION_TOKEN = os.getenv('VERIFICATION_TOKEN')
+ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+PHONE_NUMBER_ID = os.getenv('PHONE_NUMBER_ID')
 
-# Define your access token and API endpoint
-ACCESS_TOKEN = 'EAAMSU02Fu7YBO89US5vltH8GMZCkZBQkaXlIUpe1pFAxcLGLjhz0qZBbqWDfNxN20bBXsMKw66WqPteHZAXXBmDTrjZB7f3hnixy9ZAr8sXTuqqe8dRV9IZArtksGNHSwv8laBupIT7wrLBP6yQIj757a5iYmcwKyJqDv3UAN5FFQbpmWab7Be5nx6pG2tntd8T400pEmmZCMUslRtZB71IvzJy7Fi88ZD'
-PHONE_NUMBER_ID = '512398011948890'  # Replace with your WhatsApp Business phone number ID
 API_URL = f'https://graph.facebook.com/v21.0/{PHONE_NUMBER_ID}/messages'
 
 headers = {
