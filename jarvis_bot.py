@@ -42,7 +42,6 @@ def send_whatsapp(to, template):
 def index():
     return "The app is running!", 200
 
-
 @app.route('/train', methods=['GET', 'POST'])
 def webhook():
     if request.method == 'GET':
@@ -52,18 +51,27 @@ def webhook():
             return request.args.get("hub.challenge")
         return "Verification token mismatch", 403
     
-    # Existing POST handling code
+    # Handle POST request
     if request.method == 'POST':
         try:
             data = request.get_json()
             print("Received data:", data)  # Debug line to print incoming data
 
-            message = data['messages'][0]['text']['body']
-            sender_id = data['messages'][0]['from']
+            # Access the message data safely
+            entry = data.get("entry", [])[0]  # Get the first entry
+            changes = entry.get("changes", [])[0]  # Get the first change
+            message_value = changes.get("value", {})
+            messages = message_value.get("messages", [])
+
+            if not messages:
+                print("No messages found in the received data.")
+                return jsonify({"status": "error", "message": "No messages found"}), 400
+
+            # Access message content
+            message = messages[0]['text']['body']
+            sender_id = messages[0]['from']
             print("Message:", message)  # Debug line to print message content
             print("Sender ID:", sender_id)  # Debug line to print sender ID
-
-            time = 0
 
             if message.startswith("#train"):
                 try:
@@ -99,6 +107,7 @@ def webhook():
         except Exception as e:
             print("Exception:", e)  # General error logging
             return jsonify({"status": "error", "message": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
