@@ -33,6 +33,11 @@ def send_whatsapp(to, template):
         print("Message sent successfully!")
     else:
         print("Failed to send message:", response.text)
+        
+@app.route('/')
+def index():
+    return "The app is running!", 200
+
 
 @app.route('/train', methods=['POST'])
 def webhook():
