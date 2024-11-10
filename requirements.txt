@@ -3,3 +3,4 @@ requests
 flask
 gunicorn
 webdriver_manager
+sqlite3

@@ -1,43 +1,22 @@
-import requests 
+import datetime
+import requests
+import sqlite3
+import threading
+import time
 from flask import Flask, request, jsonify
-from athletic_logger import reserve_swim, reserve_gym
-
+from reminders_db import get_all_reminders, init_db, check_and_send_reminders
+from send_whatsapp import send_whatsapp
+# from sport_reservation import athletic_reservation
+from set_reminder import set_reminder
 import os
 
 app = Flask(__name__)
 
 VERIFICATION_TOKEN = os.getenv('VERIFICATION_TOKEN')
-ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
-PHONE_NUMBER_ID = os.getenv('PHONE_NUMBER_ID')
 
-API_URL = f'https://graph.facebook.com/v21.0/{PHONE_NUMBER_ID}/messages'
+# Initialize the database at startup
+# init_db()
 
-headers = {
-    'Authorization': f'Bearer {ACCESS_TOKEN}',
-    'Content-Type': 'application/json'
-}
-
-def send_whatsapp(to, template):
-    data = {
-        "messaging_product": "whatsapp",
-        "to": to,  
-        "type": "template",
-        "template": {
-            "name": template,  
-            "language": {"code": "en"}
-        }
-    }
-
-    response = requests.post(API_URL, headers=headers, json=data)
-    print("API response status:", response.status_code)  # Print status code
-    print("API response text:", response.text)  # Print response body
-
-    if response.status_code == 200:
-        print("Message sent successfully!")
-    else:
-        print("Failed to send message:", response.text)
-
-        
 @app.route('/')
 def index():
     return "The app is running!", 200
@@ -73,34 +52,15 @@ def webhook():
             print("Message:", message)  # Debug line to print message content
             print("Sender ID:", sender_id)  # Debug line to print sender ID
 
-            if message.startswith("#train"):
-                try:
-                    # Split the message to extract the command parts
-                    parts = message.split(" -")
+            # if message.startswith("#train"):
+            #     athletic_reservation(message, sender_id)
+            if message.startswith("#help"):
+                send_whatsapp(message, sender_id)
+            elif message.startswith("#log"):
+                ...
+            elif message.startswith("#remember"):
+                set_reminder(message, sender_id)
 
-                    # Check if we have enough parts for a valid command
-                    if len(parts) >= 2:
-                        # Extract sport
-                        sport = parts[1].strip()
-                        date = parts[2].strip() if len(parts) > 2 else None
-                        print("Sport:", sport)  # Debug line
-                        print("Date:", date)    # Debug line
-
-                        if sport == "swim" and date:
-                            send_whatsapp(sender_id, "gym_reservation_ack")
-                            reserve_swim(date)
-                        elif sport == "gym" and date:
-                            send_whatsapp(sender_id, "gym_reservation_ack")
-                            reserve_gym(date)
-                        else:
-                            send_whatsapp(sender_id, "gym_reservation_time_error" if date is None else "gym_reservation_format_error")
-                    else:
-                        send_whatsapp(sender_id, "gym_reservation_format_error")
-
-                except ValueError as ve:
-                    print("ValueError:", ve)  # Debug line for exceptions
-                    send_whatsapp(sender_id, "automation_format_error")
-                    return jsonify({"status": "error", "message": "Invalid command format"})
 
             return jsonify({"status": "received"}), 200
         
@@ -108,8 +68,16 @@ def webhook():
             print("Exception:", e)  # General error logging
             return jsonify({"status": "error", "message": str(e)}), 500
 
+# Background function for checking reminders
+def run_reminder_checker():
+    while True:
+        check_and_send_reminders()
+        time.sleep(10) 
 
 if __name__ == '__main__':
+    # Start the reminder-checking thread
+    reminder_thread = threading.Thread(target=run_reminder_checker, daemon=True)
+    reminder_thread.start()
+
+    # Run the Flask app
     app.run(port=5000, debug=True)
-    
-    

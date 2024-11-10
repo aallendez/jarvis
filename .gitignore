@@ -1,7 +1,1 @@
-# Ignore virtual environment directories
-env/
-venv/
-
-# Ignore Python cache files
-__pycache__/
-*.pyc
+git rm -r --cached env __pycache__
