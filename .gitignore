@@ -1,1 +1,1 @@
-git rm -r --cached env __pycache__
+git rm -r --cached .env .DS_Store __pycache__
