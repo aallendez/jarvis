@@ -59,7 +59,7 @@ def webhook():
             elif message.startswith("#log"):
                 ...
             elif message.startswith("#remember"):
-                set_reminder(message, sender_id)
+                set_reminder(sender_id, "help")
 
 
             return jsonify({"status": "received"}), 200
