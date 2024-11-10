@@ -11,7 +11,7 @@ REMINDERS:
    **#remember -show**
 
 GYM RESERVATIONS
-**Warning**: these commands are currently not working given that the IE athletic reservation page is not working. Thus some of the functions I have not been able to code yet. However the reminder commands are fully functional.
+**Warning**: these commands are currently not working given that the athletic reservation page is not working. Thus some of the functions I have not been able to code yet. However the reminder commands are fully functional.
 - Make a gym reservation:
    **#train -gym -time**
 - Make a swim reservation:
