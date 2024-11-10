@@ -55,7 +55,7 @@ def webhook():
             # if message.startswith("#train"):
             #     athletic_reservation(message, sender_id)
             if message.startswith("#help"):
-                send_whatsapp(message, sender_id)
+                send_whatsapp(sender_id, "help")
             elif message.startswith("#log"):
                 ...
             elif message.startswith("#remember"):
