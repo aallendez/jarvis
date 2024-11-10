@@ -6,12 +6,12 @@ This is a bot that works on command-line-like fashion. Where you send a whatsapp
 
 REMINDERS:
 - To set a reminder: 
-   *#remember -date -time -content*
+   **#remember -date -time -content**
 - To see all active reminders:
-   #remember -show
+   **#remember -show**
 
 GYM RESERVATIONS
 - Make a gym reservation:
-   #train -gym -time
+   **#train -gym -time**
 - Make a swim reservation:
-   #train -swim -time
+   **#train -swim -time**
