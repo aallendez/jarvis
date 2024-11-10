@@ -6,7 +6,7 @@ This is a bot that works on command-line-like fashion. Where you send a whatsapp
 
 REMINDERS:
 - To set a reminder: 
-   #remember -date -time -content
+   *#remember -date -time -content*
 - To see all active reminders:
    #remember -show
 
